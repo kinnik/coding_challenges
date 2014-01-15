@@ -14,8 +14,8 @@ int main()
   unsigned short query_anchor = 0;
   unsigned short num_queries = 0;
   
-  unsigned long* gold_data;
-  unsigned long** gold;
+  unsigned int* gold_data;
+  unsigned int** gold;
 
   while (getline(cin, line))
   {
@@ -25,10 +25,10 @@ int main()
     {
       ss >> dim[0] >> dim[1];
     	
-	    gold_data = new unsigned long[dim[0] * dim[1]];
-      gold = new unsigned long*[dim[0]];
+	    gold_data = new unsigned int[dim[0] * dim[1]];
+      gold = new unsigned int*[dim[0]];
 
-      for (unsigned long a; a < dim[0]; ++a)
+      for (unsigned int a; a < dim[0]; ++a)
 		    gold[a] = gold_data + dim[1] * a;
 
       query_anchor = dim[0] + 2;
@@ -39,7 +39,7 @@ int main()
         while(getline(ss, field, ' '))
         {
 		        stringstream strstm(field);
-            unsigned long g;
+            unsigned int g;
             strstm >> g;
             gold[line_num-2][j] = g;
 			      ++j;
@@ -60,7 +60,7 @@ int main()
       unsigned short row_hi = --query_array[2];
       unsigned short col_hi = --query_array[3];
 
-      unsigned long total_gold = 0;
+      unsigned long long total_gold = 0;
 
       for (unsigned short r=row_lo; r<= row_hi; ++r)
       {
@@ -69,7 +69,7 @@ int main()
           total_gold += gold[r][c];
         }
       }
-      fprintf(stdout, "%lu\n", total_gold);
+      fprintf(stdout, "%llu\n", total_gold);
       fflush(stdout);
     }
     ++line_num;
