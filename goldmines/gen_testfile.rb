@@ -31,11 +31,11 @@ puts "#{num_queries}"
 #1 <= x1 <= x2 <= num_cols
 #1 <= y1 <= y2 <= num_rows
 (1..num_queries).each do |q|
-  x1 = 1 + rand(num_cols)
-  y1 = 1 + rand(num_rows)
+  x1 = 1 + rand(num_rows)
+  y1 = 1 + rand(num_cols)
 
-  x2 = x1 + Random.rand(num_cols + 1 - x1)
-  y2 = y1 + Random.rand(num_rows + 1 - y1)
+  x2 = x1 + Random.rand(num_rows + 1 - x1)
+  y2 = y1 + Random.rand(num_cols + 1 - y1)
 
   puts "#{x1} #{y1} #{x2} #{y2}"
 end
