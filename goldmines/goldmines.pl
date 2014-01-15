@@ -41,22 +41,22 @@ while (<>)
   {
     my @query = map { int $_ } split / /, $_;
 
-    if ($query[0] < 1 or $query[0] > $dim[1])
+    if ($query[0] < 1 or $query[0] > $dim[0])
     {
       exit -1;
     }
     if ($query[0] > $query[2]) { exit -1; }
 
-    if ($query[1] < 1 or $query[1] > $dim[0])
+    if ($query[1] < 1 or $query[1] > $dim[1])
     {
       exit -1;
     }
     if ($query[1] > $query[3]) { exit -1; }
 
-    my $row_lo = $query[1] - 1;
-    my $row_hi = $query[3] - 1;
-    my $col_lo = $query[0] - 1;
-    my $col_hi = $query[2] - 1;
+    my $row_lo = $query[0] - 1;
+    my $row_hi = $query[2] - 1;
+    my $col_lo = $query[1] - 1;
+    my $col_hi = $query[3] - 1;
 
     my $sum = 0;
 

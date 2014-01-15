@@ -14,7 +14,7 @@ class SimpleBenchmarker
     end_time = Time.now
     #puts "End Time:\t#{end_time}\n"
     #puts "---------- Benchmarking finished ----------\n\n"
-    puts "#{desc}:\t\t#{end_time - start_time} seconds"
+    #puts "#{desc}:\t\t#{end_time - start_time} seconds"
   end
 end
 
@@ -63,26 +63,26 @@ index = -1
           query = line.chomp.split(' ').map { |l| l.to_i }
 
           # 1 <= x1 <= x2 <= R
-          if (query[0] < 1 or query[0] > dim[1])
-            raise ArgumentError, "line number #{index+1}: #{query[0]} < 1 or #{query[0]} > #{dim[1]}"
+          if (query[0] < 1 or query[0] > dim[0])
+            raise ArgumentError, "line number #{index+1}: #{query[0]} < 1 or #{query[0]} > #{dim[0]}"
+          end
+          if query[1] > query[3]
+            raise ArgumentError
+          end
+
+      	  # 1 <= y1 <= y2 <= C
+          if (query[1] < 1 or query[1] > dim[1])
+            raise ArgumentError, "line number #{index+1}: #{query[1]} < 1 or #{query[1]} > #{dim[1]}"
           end
           if query[0] > query[2]
             raise ArgumentError
           end
 
-      	  # 1 <= y1 <= y2 <= C
-          if (query[1] < 1 or query[1] > dim[0])
-            raise ArgumentError, "line number #{index+1}: #{query[1]} < 1 or #{query[1]} > #{dim[0]}"
-          end
 
-        	if query[1] > query[3]
-        	  raise ArgumentError
-          end
-
-          row_lo = query[1]-1
-          row_hi = query[3]-1
-          col_lo = query[0]-1
-          col_hi = query[2]-1
+          row_lo = query[0]-1
+          row_hi = query[2]-1
+          col_lo = query[1]-1
+          col_hi = query[3]-1
 
           grid_rows = row_hi - row_lo + 1
           grid_cols = col_hi - col_lo + 1
