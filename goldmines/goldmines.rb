@@ -24,11 +24,12 @@ num_query = 0
 results = []
 
 
-input = ARGF.read
+#input = ARGF.read
 
 SimpleBenchmarker.go 5 do
   line_num = 1
-  input.each_line do |line|
+  #input.each_line do |line|
+  ARGF.each_line do |line|
 
       if line_num == 1
         #dim = line.split(' ').map! { |x| x.to_i }
@@ -90,6 +91,7 @@ SimpleBenchmarker.go 5 do
       line_num += 1
   end
   puts results
-  $stdout.flush
+  #print results.join("\n")
+  #$stdout.flush
 end
 
