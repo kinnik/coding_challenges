@@ -1,20 +1,18 @@
 #!/usr/bin/env perl -w
 
-use strict;
-use warnings;
-use Data::Dumper;
+$|=1;
 
 my $index = 0;
 my @dim;
 my @grid;
-my $num_query = 0;
+my @results;
 
 while (<>)
 {
   chomp;
   if ($index == 0) 
   {
-    @dim = map { int $_ } split / /, $_;
+    @dim = split / /, $_;
     
     if ($dim[0] < 1 or $dim[0] > 1000)
     {
@@ -30,16 +28,17 @@ while (<>)
 
   if ($index <= $dim[0]) 
   {
-    my @row_gold = map { int $_ } split / /, $_;
+    my @row_gold = split / /, $_, $dim[1];
     push @{$grid[$index-1]}, @row_gold;
   }
   elsif ($index == $dim[0] + 1) 
   {
-    $num_query = int $_;
+    # fix the results array size
+    $#results = $_ - 1;
   }
   else
   {
-    my @query = map { int $_ } split / /, $_;
+    my @query = split / /, $_;
 
     if ($query[0] < 1 or $query[0] > $dim[0])
     {
@@ -65,10 +64,12 @@ while (<>)
         $sum += $grid[$r][$c]
       }
     }
-    print STDOUT "$sum\n";
+    #print STDOUT "$sum\n";
+    $results[$index-$dim[0]-2] = $sum
   }
 
   $index += 1;
   next;
 }
+print STDOUT join "\n", @results;
 
