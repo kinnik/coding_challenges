@@ -18,21 +18,20 @@ class SimpleBenchmarker
   end
 end
 
-dim = []
-grid = []
-num_query = 0
-results = []
 
-
-#input = ARGF.read
 
 SimpleBenchmarker.go 5 do
+  dim = []
+  grid = []
+  num_query = 0
+  results = []
+
+  input = ARGF.readlines
   line_num = 1
-  #input.each_line do |line|
-  ARGF.each_line do |line|
+  
+  input.each do |line|
 
       if line_num == 1
-        #dim = line.split(' ').map! { |x| x.to_i }
         dim = line.scan(/\d+/).map(&:to_i)
 
 
@@ -51,12 +50,10 @@ SimpleBenchmarker.go 5 do
             end
           end
       elsif line_num == dim[0] + 2
-        num_query = line.to_i
-        results = Array.new(num_query)
+        results = Array.new(line.to_i)
       else
 
           query = line.scan(/\d+/).map(&:to_i)
-          #query = line.split(' ').map! {|x| x.to_i}
 
           # 1 <= x1 <= x2 <= R
           if (query[0] < 1 or query[0] > dim[0])
@@ -83,8 +80,6 @@ SimpleBenchmarker.go 5 do
             sum += grid[r][col_lo..col_hi].inject(:+)
           end
 
-          #puts sum
-          #$stdout.flush
           results[line_num-dim[0]-3] = sum
 
       end
