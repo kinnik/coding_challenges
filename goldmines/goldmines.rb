@@ -1,92 +1,92 @@
 #!/usr/bin/env ruby
 
+dim = Array.new
+hacc_grid = Array.new
+vacc_grid = Array.new
+results = Array.new
 
-class SimpleBenchmarker
-  def self.go(how_many=1, &block)
-    #puts "---------- Benchmarking started ----------"
-    start_time = Time.now
-    #puts "Start Time:\t#{start_time}\n\n"
-    how_many.times do |a|
-      #print "."
-      block.call
-    end
-    #print "\n\n"
-    end_time = Time.now
-    #puts "End Time:\t#{end_time}\n"
-    #puts "---------- Benchmarking finished ----------\n\n"
-    puts "Result:\t\t#{end_time - start_time} seconds"
-  end
-end
+ARGF.readlines.each_with_index do |line, line_num|
 
+    if line_num == 0
+      dim = line.scan(/\d+/).map(&:to_i)
+      hacc_grid = vacc_grid = Array.new(dim[0])
+    elsif line_num <= dim[0]
+        hacc = Array.new()
+        vacc = Array.new()
+        j = 0
+        line.scan(/\d+/).map(&:to_i).reduce(0) do |acc, current|
+          sum = acc + current
+          hacc << sum
 
+          if (line_num == 1)
+            vacc << sum
+          elsif (line_num > 1)
+            vacc << vacc_grid[line_num-2][j] + sum
+          end
 
-SimpleBenchmarker.go 5 do
-  dim = []
-  grid = []
-  num_query = 0
-  results = []
-
-  input = ARGF.readlines
-  line_num = 1
-  
-  input.each do |line|
-
-      if line_num == 1
-        dim = line.scan(/\d+/).map(&:to_i)
-
-
-        if dim[0] < 1 or dim[0] > 1000 or 
-           dim[1] < 1 or dim[1] > 1000
-          raise ArgumentError
+          j += 1
+          sum
         end
-      elsif line_num <= dim[0] + 1
-          grid[line_num-2] = line.scan(/\d+/).map do |x|
-            gold = x.to_i
-            # Amount of gold in each cell is an integer from 0 to 10^6
-            if gold < 0 or gold > 10 ** 6
-            	raise ArgumentError
-            else
-            	gold
+        hacc_grid[line_num-1] = hacc
+        vacc_grid[line_num-1] = vacc
+    elsif line_num == dim[0] + 1
+      #results = Array.new(line.to_i)
+      hacc = nil
+    else
+
+        # -1 because the grid is zero-indexed
+        query = line.scan(/\d+/).map { |x| x.to_i - 1}
+
+        all_sum = 0
+
+          # for readibility
+          x1 = query[0]
+          y1 = query[1]
+          x2 = query[2]
+          y2 = query[3]
+
+          first_subtraction = 0
+          second_subtraction = 0
+
+          left_bound = [0,0]
+          top_bound = [0,0]
+          vert_bound = [0,0]
+
+          left_bound[0] = x2
+          left_bound[1] = y1 - 1
+
+          top_bound[0] = x1 - 1
+          top_bound[1] = y2
+          
+          vert_bound[0] = x1 - 1
+          vert_bound[1] = y1 - 1
+
+          # let's do this
+          if (top_bound[0] != -1)
+            if (x2 != 0)
+              first_subtraction = vacc_grid[x2][y2] - vacc_grid[top_bound[0]][top_bound[1]]
+            end
+          else
+            first_subtraction = vacc_grid[x2][y2]
+          end
+
+          if (left_bound[1] != -1)
+            if (y1 != 0)
+              second_subtraction = vacc_grid[left_bound[0]][left_bound[1]]
             end
           end
-      elsif line_num == dim[0] + 2
-        results = Array.new(line.to_i)
-      else
 
-          query = line.scan(/\d+/).map(&:to_i)
-
-          # 1 <= x1 <= x2 <= R
-          if (query[0] < 1 or query[0] > dim[0])
-            raise ArgumentError, "line number #{line_num}: #{query[0]} < 1 or #{query[0]} > #{dim[0]}"
+          if (vert_bound[0] != -1 && vert_bound[1] != -1)
+            second_subtraction -= vacc_grid[vert_bound[0]][vert_bound[1]]
           end
 
-      	  # 1 <= y1 <= y2 <= C
-          if (query[1] < 1 or query[1] > dim[1])
-            raise ArgumentError, "line number #{line_num}: #{query[1]} < 1 or #{query[1]} > #{dim[1]}"
-          end
 
-          if query[0] > query[2] or query[1] > query[3]
-            raise ArgumentError
-          end
+          all_sum = first_subtraction - second_subtraction
 
-          row_lo = query[0]-1
-          row_hi = query[2]-1
-          col_lo = query[1]-1
-          col_hi = query[3]-1
 
-          sum = 0
+        results.push(all_sum)
 
-          (row_lo..row_hi).each do |r|
-            sum += grid[r][col_lo..col_hi].inject(:+)
-          end
-
-          results[line_num-dim[0]-3] = sum
-
-      end
-      line_num += 1
-  end
-  puts results
-  #print results.join("\n")
-  #$stdout.flush
+    end
 end
-
+puts results
+$stdout.flush
