@@ -13,7 +13,7 @@ Benchmark.bmbm do |benchmark|
         line.chomp!
 
         if line_num == 0
-          num_strings = line.chomp.to_i
+          num_strings = line.to_i
 
         elsif line_num <= num_strings
 
