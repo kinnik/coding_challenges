@@ -40,6 +40,7 @@ int main()
 
   // read the number of queries
   scanf("%u", &num_queries);
+  std::vector<unsigned long> results(num_queries);
 
   // process the queries
   while (num_executions < num_queries)
@@ -64,11 +65,14 @@ int main()
     if (x1 != 0 && y1 != 0) {
       total_gold += sum_grid[x1-1][y1-1];
     }
+    results[num_executions] = total_gold;
     ++num_executions;
+  }
 
-    fprintf(stdout, "%lu\n", total_gold);
+  for (std::vector<unsigned long>::const_iterator it=results.begin();
+       it != results.end(); ++ it) {
+    fprintf(stdout, "%lu\n", *it);
     fflush(stdout);
-
   }
 
   sec = (int) time(NULL) - start;
@@ -78,4 +82,4 @@ int main()
 }
 
 // Compile flags
-// g++ -std=c++0x -w -O2 -formit-frame-pointer -lm goldmines.cpp
+// g++ -std=c++0x -w -O2 -formit-frame-pointer -lm goldmines.cpp -o goldmines

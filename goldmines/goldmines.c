@@ -1,7 +1,11 @@
 #include <stdio.h>
+#include <time.h>
 
 int main()
 {
+  time_t start = time(NULL);
+  unsigned int sec;
+
   // declarations & initialisations
 
   unsigned short num_rows, num_cols;
@@ -32,6 +36,8 @@ int main()
 
   // read the number of queries
   scanf("%u", &num_queries);
+  // prepare the results array
+  unsigned long results[num_queries];
 
   // process the queries
   while (num_executions < num_queries)
@@ -56,15 +62,20 @@ int main()
     if (x1 != 0 && y1 != 0) {
       total_gold += sum_grid[x1-1][y1-1];
     }
+    results[num_executions] = total_gold;
     ++num_executions;
-
-    fprintf(stdout, "%lu\n", total_gold);
-    fflush(stdout);
-
   }
+
+  for (unsigned int i = 0; i < num_queries; ++i) {
+    fprintf(stdout, "%lu\n", results[i]);
+    fflush(stdout);
+  }
+
+  sec = (unsigned int) time(NULL) - start;
+  fprintf(stdout, "%u seconds\n", sec);
 
   return 0;
 }
 
 // Compiler flags
-// -std=gnu99 -w -O2 -fomit-frame-pointer -lm
+// gcc -std=gnu99 -w -O2 -fomit-frame-pointer -lm
