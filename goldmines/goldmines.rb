@@ -37,8 +37,6 @@ Benchmark.bmbm do |benchmark|
             # -1 because the grid is zero-indexed
             query = line.scan(/\d+/).map{ |x| x.to_i - 1 }
 
-            all_sum = 0
-
             # let's do this
             all_sum = sum_grid[query[2]][query[3]]
             if (query[0] != 0 && query[2] != 0)
