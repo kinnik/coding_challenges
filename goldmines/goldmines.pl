@@ -7,7 +7,6 @@ use Data::Dumper;
 
 my $start_time;
 
-my ($num_rows, $num_cols);
 my @sum_grid;
 my @results;
 
@@ -16,47 +15,50 @@ chomp @input;
 
 $start_time = new Benchmark;
 
-foreach my $line_num(0..$#input) {
+# read the size of the grid
+my ($num_rows, $num_cols) = split m/\s/, $input[0], 2;
 
-  if ($line_num == 0) {
-    ($num_rows, $num_cols) = split m/\s/, $input[$line_num], 2;
-  } elsif ($line_num <= $num_rows) {
-    my @row_gold = split m/\s/, $input[$line_num], $num_cols;
+# build up the accumulated sums
+foreach my $line_num(1..$num_rows) {
+  my @row_gold = split m/\s/, $input[$line_num], $num_cols;
 
-    my $sum = 0;
-    my @accumulator;
+  my $sum = 0;
+  my @accumulator;
 
-    foreach my $index(0..$#row_gold) {
-      $sum += $row_gold[$index];
+  foreach my $index(0..$#row_gold) {
+    $sum += $row_gold[$index];
 
-      if ($line_num == 1) {
-        push @accumulator, $sum;
-      } else {
-        push @accumulator, $sum_grid[-1][$index] + $sum
-      }
+    if ($line_num == 1) {
+      push @accumulator, $sum;
+    } else {
+      push @accumulator, $sum_grid[-1][$index] + $sum
     }
-    push @sum_grid, [@accumulator];
-  } elsif ($line_num == $num_rows + 1) {
-    # fix the results array size
-    # $#results = $line_num - 1;
-  } else {
-    my ($x1, $y1, $x2, $y2) = map { $_ - 1 } split m/\s/, $input[$line_num], 4;
+  }
+  push @sum_grid, [@accumulator];
+}
 
-    my $sum = $sum_grid[$x2][$y2];
-    if ($x1 != 0 && $x2 != 0) {
-      $sum -= $sum_grid[$x1-1][$y2]
-    }
-    if ($y1 != 0) {
-      $sum -= $sum_grid[$x2][$y1-1]
-    }
-    if ($x1 != 0 && $y1 != 0) {
-      $sum += $sum_grid[$x1-1][$y1-1]
-    }
+# get the number of queries
+my $num_queries = $input[$num_rows + 1];
 
-    push @results, $sum;
+# process the queries
+foreach my $line_num($num_rows+2..$num_rows+2+$num_queries-1) {
+  my ($x1, $y1, $x2, $y2) = map { $_ - 1 } split m/\s/, $input[$line_num], 4;
+
+  my $sum = $sum_grid[$x2][$y2];
+  if ($x1 != 0 && $x2 != 0) {
+    $sum -= $sum_grid[$x1-1][$y2]
+  }
+  if ($y1 != 0) {
+    $sum -= $sum_grid[$x2][$y1-1]
+  }
+  if ($x1 != 0 && $y1 != 0) {
+    $sum += $sum_grid[$x1-1][$y1-1]
   }
 
+  push @results, $sum;
 }
+
+
 print STDOUT join "\n", @results;
 print STDOUT "\n";
 
