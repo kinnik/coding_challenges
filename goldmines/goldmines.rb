@@ -39,27 +39,18 @@ Benchmark.bmbm do |benchmark|
 
             all_sum = 0
 
-            # for readibility
-            x1 = query[0]
-            y1 = query[1]
-            x2 = query[2]
-            y2 = query[3]
-
             # let's do this
-            if (x1 != 0)
-              if (x2 != 0)
-                all_sum = sum_grid[x2][y2] - sum_grid[x1-1][y2]
-              end
-            else
-              all_sum = sum_grid[x2][y2]
+            all_sum = sum_grid[query[2]][query[3]]
+            if (query[0] != 0 && query[2] != 0)
+                all_sum -= sum_grid[query[0]-1][query[3]]
             end
 
-            if (y1 != 0)
-                all_sum -= sum_grid[x2][y1-1]
+            if (query[1] != 0)
+                all_sum -= sum_grid[query[2]][query[1]-1]
             end
 
-            if (x1 != 0 && y1 != 0)
-              all_sum += sum_grid[x1-1][y1-1]
+            if (query[0] != 0 && query[1] != 0)
+              all_sum += sum_grid[query[0]-1][query[1]-1]
             end
 
             results.push(all_sum)
