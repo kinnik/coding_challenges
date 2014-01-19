@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <time.h>
+#include <vector>
 
 using namespace std;
 
@@ -9,61 +10,65 @@ int main()
   time_t start = time(NULL);
   int sec;
 
-  unsigned short num_rows, num_cols = 0;
-  unsigned short num_queries = 0;
-  unsigned short num_executions = 0;
-  
-  unsigned int* gold_data;
-  unsigned int** gold;
+  unsigned short num_rows, num_cols;
+  unsigned int num_queries;
+  unsigned int num_executions = 0;
 
-  register unsigned short row_lo = 0;
-  register unsigned short col_lo = 0;
-  register unsigned short row_hi = 0;
-  register unsigned short col_hi = 0;
-
-  // read rows & columns
+  // read the size
   scanf("%hu%hu", &num_rows, &num_cols);
 
-  // declare and initialise the contriner
-  gold_data = new unsigned int[num_rows * num_cols];
-  gold = new unsigned int*[num_rows];
+  // build up the accumulated sums
+  std::vector<std::vector<unsigned long>> sum_grid(num_rows, std::vector<unsigned long>(num_cols));
+  for (unsigned short i=0; i<num_rows; ++i) 
+  {
+    unsigned long sum = 0;
+    std::vector<unsigned long> accumulator(num_cols);
 
-  for (unsigned short a = 0; a < num_rows; ++a)
-    gold[a] = gold_data + num_cols * a;
+    for (unsigned short j=0; j<num_cols; ++j) 
+    {
+      unsigned int gold = 0;
+      scanf("%u", &gold);
+      sum += gold;
 
-  // read in the gold
-  for (unsigned short i=0; i<num_rows; ++i) {
-    for (unsigned short j=0; j<num_cols; ++j) {
-      scanf("%u", &gold[i][j]);
+      if (i == 0)
+        accumulator[j] = sum;
+      else
+        accumulator[j] = sum_grid[i-1][j] + sum;
     }
+    sum_grid[i] = accumulator;
   }
 
-  // read the number of queries and size the results vector
-  scanf("%hu", &num_queries);
-  //results.resize(num_queries);
+  // read the number of queries
+  scanf("%u", &num_queries);
 
+  // process the queries
   while (num_executions < num_queries)
   {
+    unsigned short x1, y1, x2, y2;
     // read and process the queries
-    scanf("%hu%hu%hu%hu", &row_lo, &col_lo, &row_hi, &col_hi);
+    scanf("%hu%hu%hu%hu", &x1, &y1, &x2, &y2);
       // remember, the grid is zero-indexed
-    --row_lo;
-    --col_lo;
-    --row_hi;
-    --col_hi;
+    --x1;
+    --y1;
+    --x2;
+    --y2;
 
-    register unsigned long total_gold = 0;
+    unsigned long total_gold = sum_grid[x2][y2];
 
-    for (unsigned short r=row_lo; r<= row_hi; ++r)
-    {
-      for (unsigned short c=col_lo; c<= col_hi; ++c) 
-      {
-         total_gold += gold[r][c];
-      }
+    if (x1 != 0 && x2 != 0) {
+      total_gold -= sum_grid[x1-1][y2];
     }
+    if (y1 != 0) {
+      total_gold -= sum_grid[x2][y1-1];
+    }
+    if (x1 != 0 && y1 != 0) {
+      total_gold += sum_grid[x1-1][y1-1];
+    }
+    ++num_executions;
+
     fprintf(stdout, "%lu\n", total_gold);
     fflush(stdout);
-    ++num_executions;
+
   }
 
   sec = (int) time(NULL) - start;
