@@ -1,43 +1,47 @@
 #!/usr/bin/env ruby
 
+require 'benchmark'
+
 dim = Array.new
-hacc_grid = Array.new
-vacc_grid = Array.new
+sum_grid = Array.new
 results = Array.new
 
-ARGF.readlines.each_with_index do |line, line_num|
+Benchmark.bmbm do |benchmark|
 
-    if line_num == 0
-      dim = line.scan(/\d+/).map(&:to_i)
-      hacc_grid = vacc_grid = Array.new(dim[0])
-    elsif line_num <= dim[0]
-        hacc = Array.new()
-        vacc = Array.new()
-        j = 0
-        line.scan(/\d+/).map(&:to_i).reduce(0) do |acc, current|
-          sum = acc + current
-          hacc << sum
+  benchmark.report ("the whole thing") do
+  ARGF.readlines.each_with_index do |line, line_num|
 
-          if (line_num == 1)
-            vacc << sum
-          elsif (line_num > 1)
-            vacc << vacc_grid[line_num-2][j] + sum
+      if line_num == 0
+        dim = line.scan(/\d+/).map(&:to_i)
+        sum_grid = Array.new(dim[0])
+      elsif line_num <= dim[0]
+        
+          vacc = Array.new()
+          j = 0
+          line.scan(/\d+/).map(&:to_i).reduce(0) do |acc, current|
+            sum = acc + current
+
+            if (line_num == 1)
+              vacc.push(sum)
+            else
+              vacc.push(sum_grid[line_num-2][j] + sum)
+            end
+
+            j += 1
+            sum
           end
+          sum_grid[line_num-1] = vacc
 
-          j += 1
-          sum
-        end
-        hacc_grid[line_num-1] = hacc
-        vacc_grid[line_num-1] = vacc
-    elsif line_num == dim[0] + 1
-      #results = Array.new(line.to_i)
-      hacc = nil
-    else
+      elsif line_num == dim[0] + 1
+        #results = Array.new(line.to_i)
+      else
 
-        # -1 because the grid is zero-indexed
-        query = line.scan(/\d+/).map { |x| x.to_i - 1}
+          # -1 because the grid is zero-indexed
+          query = line.scan(/\d+/).map{ |x| x.to_i - 1 }
 
-        all_sum = 0
+          first_subtraction = 0
+          second_subtraction = 0
+          all_sum = 0
 
           # for readibility
           x1 = query[0]
@@ -45,8 +49,6 @@ ARGF.readlines.each_with_index do |line, line_num|
           x2 = query[2]
           y2 = query[3]
 
-          first_subtraction = 0
-          second_subtraction = 0
 
           left_bound = [0,0]
           top_bound = [0,0]
@@ -64,29 +66,31 @@ ARGF.readlines.each_with_index do |line, line_num|
           # let's do this
           if (top_bound[0] != -1)
             if (x2 != 0)
-              first_subtraction = vacc_grid[x2][y2] - vacc_grid[top_bound[0]][top_bound[1]]
+              first_subtraction = sum_grid[x2][y2] - sum_grid[top_bound[0]][top_bound[1]]
             end
           else
-            first_subtraction = vacc_grid[x2][y2]
+            first_subtraction = sum_grid[x2][y2]
           end
 
           if (left_bound[1] != -1)
             if (y1 != 0)
-              second_subtraction = vacc_grid[left_bound[0]][left_bound[1]]
+              second_subtraction = sum_grid[left_bound[0]][left_bound[1]]
             end
           end
 
           if (vert_bound[0] != -1 && vert_bound[1] != -1)
-            second_subtraction -= vacc_grid[vert_bound[0]][vert_bound[1]]
+            second_subtraction -= sum_grid[vert_bound[0]][vert_bound[1]]
           end
-
 
           all_sum = first_subtraction - second_subtraction
 
+          results.push(all_sum)
 
-        results.push(all_sum)
+      end
+  end
 
-    end
+
+    puts results
+    $stdout.flush
+  end
 end
-puts results
-$stdout.flush
