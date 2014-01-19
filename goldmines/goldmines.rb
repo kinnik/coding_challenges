@@ -2,9 +2,9 @@
 
 require 'benchmark'
 
-dim = Array.new
-sum_grid = Array.new
-results = Array.new
+dim = []
+sum_grid = []
+results = []
 
 Benchmark.bmbm do |benchmark|
 
@@ -13,10 +13,8 @@ Benchmark.bmbm do |benchmark|
 
         if line_num == 0
           dim = line.scan(/\d+/).map(&:to_i)
-          
         elsif line_num <= dim[0]
-          
-            accumulator = Array.new()
+            accumulator = []
             j = 0
             line.scan(/\d+/).map(&:to_i).reduce(0) do |acc, current|
               sum = acc + current
@@ -24,7 +22,7 @@ Benchmark.bmbm do |benchmark|
               if (line_num == 1)
                 accumulator.push(sum)
               else
-                accumulator.push(sum_grid[line_num-2][j] + sum)
+                accumulator.push(sum_grid.last[j] + sum)
               end
 
               j += 1
@@ -39,8 +37,6 @@ Benchmark.bmbm do |benchmark|
             # -1 because the grid is zero-indexed
             query = line.scan(/\d+/).map{ |x| x.to_i - 1 }
 
-            first_subtraction = 0
-            second_subtraction = 0
             all_sum = 0
 
             # for readibility
@@ -49,35 +45,27 @@ Benchmark.bmbm do |benchmark|
             x2 = query[2]
             y2 = query[3]
 
-            col_bound = y1 - 1
-            row_bound = x1 - 1
-
             # let's do this
-            if (row_bound != -1)
+            if (x1 != 0)
               if (x2 != 0)
-                first_subtraction = sum_grid[x2][y2] - sum_grid[row_bound][y2]
+                all_sum = sum_grid[x2][y2] - sum_grid[x1-1][y2]
               end
             else
-              first_subtraction = sum_grid[x2][y2]
+              all_sum = sum_grid[x2][y2]
             end
 
-            if (col_bound != -1)
-              if (y1 != 0)
-                second_subtraction = sum_grid[x2][col_bound]
-              end
+            if (y1 != 0)
+                all_sum -= sum_grid[x2][y1-1]
             end
 
-            if (row_bound != -1 && col_bound != -1)
-              second_subtraction -= sum_grid[row_bound][col_bound]
+            if (x1 != 0 && y1 != 0)
+              all_sum += sum_grid[x1-1][y1-1]
             end
-
-            all_sum = first_subtraction - second_subtraction
 
             results.push(all_sum)
 
         end
     end
-
 
     puts results
     $stdout.flush
