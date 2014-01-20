@@ -11,6 +11,8 @@ int main ()
 
   scanf("%hu", &num_strings);
 
+  char *results[num_strings];
+
   for (size_t i = 0; i < num_strings; ++i)
   {
     unsigned short alphabet[26] = {0}; // initialises everything to 0  
@@ -23,10 +25,8 @@ int main ()
     for (size_t c = 0; c < num_chars; ++c)
     {
       char ascii_value = input_string[c];
-      if (ascii_value >= 97 && ascii_value <= 123)
-      {
-        alphabet[ascii_value - 97] = 1;
-      }
+      if (ascii_value >= (int) 'a' && ascii_value <= (int) 'z')
+        alphabet[ascii_value - (int) 'a'] = 1;
     }
 
     // determine if all of the alphabet array is in the range a-z
@@ -40,14 +40,16 @@ int main ()
       }
     }
 
-    if (complete_string == true) 
-    {
-      printf("%s\n", YES);
-    }
+    if (complete_string == true)
+      results[i] = YES;
     else
-    {
-      printf("%s\n", NO);
-    }
+      results[i] = NO;
+  }
+
+  for (size_t i = 0; i < num_strings; ++i)
+  {
+      fprintf(stdout, "%s\n", results[i]);
+      fflush(stdout);
   }
 
   return 0;
