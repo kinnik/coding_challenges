@@ -2,6 +2,7 @@
 
 require 'benchmark'
 require 'awesome_print'
+require 'set'
 
 num_strings = 0
 results = []
@@ -17,9 +18,9 @@ Benchmark.bmbm do |benchmark|
 
         elsif line_num <= num_strings
 
-            arr = line.split("")
+            h = Set.new(line.scan(/[a-z]/))
 
-            if (arr.uniq.size == 26)
+            if (h.size == 26)
               results.push(:YES)
             else
               results.push(:NO)
