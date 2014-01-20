@@ -1,5 +1,7 @@
 #!/usr/bin/env perl -w
 
+$|=1;
+
 use strict;
 use warnings;
 
@@ -16,13 +18,10 @@ my $num_strings = $input[0];
 
 foreach (1..$num_strings) {
 
+  # perl doesn't have sets, so i'm using a hash with just keys and no values
   my %h = map { ($_, undef) if (m/[a-z]/) } split //, $input[$_];
 
-  if (scalar keys %h == 26) { 
-    push @results, YES;
-  } else {
-    push @results, NO;
-  }
+  scalar keys %h == 26 ? push @results, YES : push @results, NO;
 
 }
 
