@@ -16,7 +16,7 @@ my $num_strings = $input[0];
 
 foreach (1..$num_strings) {
 
-  my %h = map { if (m/[a-z]/) { ($_, undef) } } split //, $input[$_];
+  my %h = map { ($_, undef) if (m/[a-z]/) } split //, $input[$_];
 
   if (scalar keys %h == 26) { 
     push @results, YES;
