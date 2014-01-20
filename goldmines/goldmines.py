@@ -16,7 +16,7 @@ for line_num in range(dim[0]):
   for i in range(0, len(row_gold)):
     sum += row_gold[i]
     
-    if line_num == 0:
+    if line_num == 0: #first line of the gold in the grid
       accumulator.append(sum)
     else:
       accumulator.append(sum_grid[-1][i] + sum)
