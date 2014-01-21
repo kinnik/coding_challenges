@@ -9,7 +9,6 @@ def run():
   num_rows, num_cols = map(int, input_text[0].split())
   sum_grid = [[None] * num_cols for r in range(num_rows)]
 
-
   for i in range(0, num_rows):
     sum = 0;
 
@@ -42,7 +41,11 @@ def run():
 
     results.append(sum)
 
+  return results
+
+def print_results(results):
   for r in results:
     print r
 
-run()
+results = run()
+print_results(results)
