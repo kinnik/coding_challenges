@@ -1,12 +1,11 @@
 #!/usr/bin/env python
 
-dim = []
 sum_grid = []
 results = []
 
-dim = map(int, raw_input().split())
+num_rows, num_cols = map(int, raw_input().split())
 
-for line_num in range(dim[0]):
+for line_num in range(num_rows):
 
   row_gold = map(int, raw_input().split())
 
