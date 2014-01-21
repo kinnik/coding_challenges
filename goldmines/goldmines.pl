@@ -6,6 +6,9 @@ use Benchmark;
 use Data::Dumper;
 
 my $start_time;
+$start_time = new Benchmark;
+
+
 
 my @sum_grid;
 my @results;
@@ -13,28 +16,24 @@ my @results;
 my @input = <STDIN>;
 chomp @input;
 
-$start_time = new Benchmark;
-
 # read the size of the grid
 my ($num_rows, $num_cols) = split m/\s/, $input[0], 2;
 
 # build up the accumulated sums
-foreach my $line_num(1..$num_rows) {
-  my @row_gold = split m/\s/, $input[$line_num], $num_cols;
+foreach my $i(0..$num_rows) {
+  my @row_gold = split m/\s/, $input[$i+1], $num_cols;
 
   my $sum = 0;
-  my @accumulator;
 
-  foreach my $index(0..$#row_gold) {
-    $sum += $row_gold[$index];
+  foreach my $j(0..$#row_gold) {
+    $sum += $row_gold[$j];
 
-    if ($line_num == 1) {
-      push @accumulator, $sum;
+    if ($i == 0) {
+      $sum_grid[$i][$j] = $sum;
     } else {
-      push @accumulator, $sum_grid[-1][$index] + $sum
+      $sum_grid[$i][$j] = $sum_grid[$i-1][$j] + $sum
     }
   }
-  push @sum_grid, [@accumulator];
 }
 
 # get the number of queries
@@ -61,6 +60,7 @@ foreach my $line_num($num_rows+2..$num_rows+2+$num_queries-1) {
 
 print STDOUT join "\n", @results;
 print STDOUT "\n";
+
 
 my $end_time = new Benchmark;
 my $difference = timediff($end_time, $start_time);
