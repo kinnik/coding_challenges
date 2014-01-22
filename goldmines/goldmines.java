@@ -8,25 +8,19 @@ import java.io.InputStreamReader;
 class GoldMines {
     public static void main(String args[] ) throws Exception {
 
-        mine();
-
-    }
-
-    private static void mine() throws Exception {
-
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String line = br.readLine();
 
         long[][] sum_grid;
 
         {
-            int[] dim = convertStringToInt(line, 0);
+            final int[] dim = convertStringToInt(line, 0);
             sum_grid = new long[dim[0]][dim[1]];
 
 
             for (int i = 0; i < dim[0]; i++) {
                 line = br.readLine();
-                int[] row_gold = convertStringToInt(line, 0);
+                final int[] row_gold = convertStringToInt(line, 0);
 
                 long sum = 0;
 
@@ -45,12 +39,13 @@ class GoldMines {
 
         // read the number of queries
         line = br.readLine();
-        int num_queries = Integer.parseInt(line);
-        long[] results = new long[num_queries];
+        final int num_queries = Integer.parseInt(line);
+        
+        StringBuffer sb = new StringBuffer();
 
         for (int i = 0; i < num_queries; i++) {
             line = br.readLine();
-            int[] query = convertStringToInt(line, -1);
+            final int[] query = convertStringToInt(line, -1);
 
             long all_sum = sum_grid[query[2]][query[3]];
             if (query[0] != 0 && query[2] != 0)
@@ -62,22 +57,17 @@ class GoldMines {
             if (query[0] != 0 && query[1] != 0)
               all_sum += sum_grid[query[0]-1][query[1]-1];
 
-            results[i] = all_sum;
+            sb.append(all_sum + "\n");
         }
 
-
-        int size = results.length;
-        for (int i = 0; i < size; i++) {
-            System.out.print(results[i]);
-            System.out.print("\n");
-        }
+        System.out.println(sb.toString());
     }
 
-    private static int[] convertStringToInt(String str, int offset) {
-        String strarray[] = str.split(" ");
+    private static int[] convertStringToInt(final String str, final int offset) {
+        final String strarray[] = str.split(" ");
         int[] intarray = new int[strarray.length];
 
-        int size = strarray.length;
+        final int size = strarray.length;
 
         for (int i = 0; i < size; i++) {
             intarray[i] = Integer.parseInt(strarray[i])  + offset ;
