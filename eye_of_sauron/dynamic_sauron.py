@@ -13,47 +13,24 @@ M = 10**9 + 7
 
 max_num = max(input_nums)
 
-# power = [None] * max_num
+power = [None] * max_num
 results = []
-cache = dict()
 
 end_time = time.clock()
 
-
-def alt_calc(max_num):
-  n_2 = 1
-  n_1 = 3
-  cache[1] = n_2
-  cache[3] = n_1
+def cal_power(max_num):
+  power[0] = 1
+  power[1] = 3
 
   index = 2
-  while (index <= max_num):
-    n = 3 * n_1 - n_2
-    if index not in cache and index in input_nums:
-      cache[index] = (((3 * n_1) % M) - (n_2 % M)) % M
-
-    n_2 = n_1
-    n_1 = n
+  while (index < max_num):
+    power[index] = ((3 * power[index-1]) % M - (power[index-2] % M)) % M
     index += 1
 
-def alt_process():
+
+def process(num_tests):
   for i in input_nums:
-    results.append(cache[i])
-
-
-# def cal_power(max_num):
-#   power[0] = 1
-#   power[1] = 3
-
-#   index = 2
-#   while (index < max_num):
-#     power[index] = 3 * power[index-1] - power[index-2]
-#     index += 1
-
-
-# def process(num_tests):
-#   for i in input_nums:
-#     results.append(power[i-1] % m)
+    results.append(power[i-1])
 
 
 def print_results(results):
@@ -64,12 +41,12 @@ def print_results(results):
 init_time = end_time - start_time
 
 start_time = time.clock()
-alt_calc(max_num)
+cal_power(max_num)
 end_time = time.clock()
 cal_power_time = end_time - start_time
 
 start_time = time.clock()
-alt_process()
+process(num_tests)
 end_time = time.clock()
 process_time = end_time - start_time
 
