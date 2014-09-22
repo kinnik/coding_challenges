@@ -35,38 +35,38 @@ def play(player_number):
     # convert comp_number to name using number_to_name
     comp_name = number_to_name(comp_number)
     
-    # print results
-    print ''
-    print 'You played', number_to_name(player_number)
-    print 'Computer played', number_to_name(comp_number)
-    print result
+    # print(results
+    print('')
+    print('You played', number_to_name(player_number))
+    print('Computer played', number_to_name(comp_number))
+    print(result)
     print_score()
 
 def print_score():
-    print 'Score:', calculate_score(WINS, LOSSES), '( Wins:', WINS, '| Losses:', LOSSES, '| Draws:', DRAWS, ')'
-    print ''
+    print('Score:', calculate_score(WINS, LOSSES), '( Wins:', WINS, '| Losses:', LOSSES, '| Draws:', DRAWS, ')')
+    print('')
 
 def calculate_score(num_wins, num_losses):
     return num_wins - num_losses
 
 def print_rules():
-    print 'The rules of rock-paper-scissors-lizard-Spock are:'
-    print '* Scissors cut Paper'
-    print '* Paper covers Rock'
-    print '* Rock crushes Lizard'
-    print '* Lizard poisons Spock'
-    print '* Spock smashes Scissors'
-    print '* Scissors decapitate Lizard'
-    print '* Lizard eats Paper'
-    print '* Paper disproves Spock'
-    print '* Spock vaporizes Rock'
-    print '* Rock crushes Scissors'
-    print ''
+    print('The rules of rock-paper-scissors-lizard-Spock are:')
+    print('* Scissors cut Paper')
+    print('* Paper covers Rock')
+    print('* Rock crushes Lizard')
+    print('* Lizard poisons Spock')
+    print('* Spock smashes Scissors')
+    print('* Scissors decapitate Lizard')
+    print('* Lizard eats Paper')
+    print('* Paper disproves Spock')
+    print('* Spock vaporizes Rock')
+    print('* Rock crushes Scissors')
+    print('')
 
 def print_banner():
-    print "###################################"
-    print "# ROCK-PAPER-SCISSOR-LIZARD-SPOCK #"
-    print "###################################"
+    print("###################################")
+    print("# ROCK-PAPER-SCISSOR-LIZARD-SPOCK #")
+    print("###################################")
 
 def get_instructions():
     return 'Type one of the letters in the bracket and press Enter:\n* Rock    [R]\n* Paper   [P]\n* Scissor [X]\n* Lizard  [L]\n* Spock   [S]\n\n* Help    [H]\n* Quit    [Q]\n> '
@@ -80,7 +80,7 @@ def run():
         else:
             display_text = 'Invalid move. ' + get_instructions()
         
-        choice = raw_input(display_text)
+        choice = input(display_text)
         choice = choice[0].strip().upper()
 
         if choice == 'Q':
@@ -97,7 +97,7 @@ def run():
             except KeyError: 
                 previous_move_valid = False
 
-    print "Good bye! Thank you for playing."
+    print("Good bye! Thank you for playing.")
     print_score()
 
 run()
