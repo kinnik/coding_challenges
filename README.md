@@ -1,1 +1,1 @@
-# coding_challenges
+Coding challenges and practices from CareerCup, HackerRank, HackerEarth and Treehouse. 
