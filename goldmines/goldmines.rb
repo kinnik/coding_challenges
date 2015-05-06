@@ -5,12 +5,14 @@ require 'benchmark'
 Benchmark.bmbm do |benchmark|
 
   benchmark.report ("the whole thing") do
+
+    input_text = ARGF.readlines
   
     sum_grid = []
     results = []
     num_rows, num_cols = 0
 
-    ARGF.readlines.each_with_index do |line, line_num|
+    input_text.each_with_index do |line, line_num|
 
         if line_num == 0
           num_rows, num_cols = line.scan(/\d+/).map(&:to_i)
