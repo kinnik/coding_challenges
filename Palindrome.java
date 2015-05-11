@@ -1,6 +1,7 @@
 /**
  * Determines whether the given linked list is a palindrome in O(1) space
  * and O(N) time.
+ * http://www.careercup.com/question?id=5138770022105088
  */
 
 public class Palindrome

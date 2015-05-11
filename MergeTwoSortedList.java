@@ -4,6 +4,8 @@
   * because that is inefficient – whenever an index is provided, the traversal
   * starts from the end (head or tail), making it O(N^2).
   * The iterators are used instead to traverse the given lists.
+  *
+  * http://www.careercup.com/question?id=5187906612232192
   */
 
 import java.util.LinkedList;
